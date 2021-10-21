@@ -46,3 +46,5 @@ myzip::[a]->[b]->[(a,b)]
 myzip [] _ = []
 myzip _ [] = []
 myzip (h1:t1) (h2:t2) = (h1,h2) : myzip t1 t2
+
+teste 
