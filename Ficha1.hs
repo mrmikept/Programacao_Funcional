@@ -107,8 +107,9 @@ next cor
     |otherwise = Vermelho
 
 --(b)
-stop:: Semafro -> Bool
-stop cor = cor == Vermelho
+--stop:: Semafro -> Bool
+--stop cor 
+--    |
 
 --(c)
 safe::Semafro->Semafro->Bool
