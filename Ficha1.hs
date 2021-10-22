@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 import Distribution.Simple.Utils (xargs)
+import Control.Exception (BlockedIndefinitelyOnMVar)
 --Exercício 1
 perimetro::Float->Float
 perimetro r = 2*pi*r
@@ -58,13 +59,13 @@ horaMaior h1 h2 = if h1 > h2 then h1 else h2
 
 horaMaior2::Hora->Hora->Hora
 horaMaior2 (h1 , m1) (h2 , m2) = if horaValida(h1 , m1) && horaValida(h2 , m2)
-                                then if h1 > h2 || (h1 == h2 && m1 > m2)
+                                then if h1 > h2 || h1 == h2 && m1 > m2
                                     then (h1 , m1)
                                     else (h2 , m2)
                                 else error "hora invalida"
 
 horapmin::Hora->Int
-horapmin (h , m) 
+horapmin (h , m)
     |horaValida (h , m) = h*60+m
 
 minphora::Int->Hora
@@ -75,3 +76,46 @@ difhora (h1,m1) (h2,m2) = abs (horapmin (h1,m1) - horapmin(h2 , m2))
 
 addmin::Hora->Int->Hora
 addmin (h,m1) m2 = minphora(horapmin(h,m1) + m2)
+
+--Exercicio 4
+
+data Hora' = H Int Int deriving (Show,Eq)
+
+horaValida2 :: Hora' -> Bool
+horaValida2 (H h m) = elem h [0..23] && elem m [0..59]
+
+horaMaior'::Hora' -> Hora' -> Hora'
+horaMaior' (H h1 m1) (H h2 m2) = if horaValida2(H h1 m1) && horaValida2(H h2 m2)
+                                then if h1 > h2 || h1 == h2 && m1 > m2
+                                    then H h1 m1
+                                    else H h2 m2
+                                else error "hora invalida"
+
+horapmin2::Hora'->Int
+horapmin2 (H h m)
+    |horaValida2 (H h m) = h*60+m
+
+--Exercicio 5
+
+data Semafro = Verde | Amarelo | Vermelho deriving (Show,Eq)
+
+--(a)
+next:: Semafro -> Semafro
+next cor
+    |cor == Verde = Amarelo
+    |cor == Vermelho = Verde
+    |otherwise = Vermelho
+
+--(b)
+stop:: Semafro -> Bool
+stop cor = cor == Vermelho
+
+--(c)
+safe::Semafro->Semafro->Bool
+safe cor1 cor2 = not (cor1 == Vermelho || cor2 == Vermelho)
+
+--Exercicio 6
+
+data Ponto = Cartesiano Double Double | Polar Double Double deriving (Show,Eq)
+
+--(a)
