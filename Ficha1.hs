@@ -1,6 +1,5 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-import Distribution.Simple.Utils (xargs)
-import Control.Exception (BlockedIndefinitelyOnMVar)
+import Data.Char ( ord, chr )
 --Exercício 1
 perimetro::Float->Float
 perimetro r = 2*pi*r
@@ -108,7 +107,7 @@ next cor
 
 --(b)
 stop:: Semafro -> Bool
-stop cor = cor == Vermelho
+stop cor = cor /= Verde
 
 
 --(c)
@@ -120,3 +119,98 @@ safe cor1 cor2 = not (cor1 == Vermelho || cor2 == Vermelho)
 data Ponto = Cartesiano Double Double | Polar Double Double deriving (Show,Eq)
 
 --(a)
+
+posx::Ponto -> Double
+posx (Cartesiano x _) = x
+posx (Polar dist ang) = if ang == pi/2 || ang == -pi/2 then 0 else dist * cos ang
+
+--(b)
+
+posy::Ponto -> Double
+posy (Cartesiano _ y) = y
+posy (Polar dist ang) = if ang == 0 || ang == pi then 0 else dist * sin ang
+
+--(c)
+
+raio::Ponto -> Double
+raio (Cartesiano x y) = sqrt (x^2 + y^2)
+raio (Polar d _) = d
+
+angulo::Ponto -> Double
+angulo (Cartesiano x y)
+    |x < 0 && y == 0 = pi
+    |x < 0 = pi + atan(y/x)
+    |otherwise = atan(y/x)
+angulo (Polar _ ang) = ang
+
+dist'::Ponto->Ponto->Double
+dist' p1 p2 = sqrt((posx p1 - posx p2)^2 + (posy p1 - posy p2)^2)
+
+--Exercicio 7
+
+data Figura = Circulo Ponto Double | Retangulo Ponto Ponto | Triangulo Ponto Ponto Ponto deriving (Show,Eq)
+
+--(a)
+
+poligono::Figura -> Bool
+poligono (Circulo _ _) = False
+poligono (Retangulo p1 p2) = posx p1 /= posx p2 && posy p1 /= posy p2
+poligono (Triangulo p1 p2 p3) = (posy p1 - posy p2) / (posx p1 - posx p2) /= (posy p2 - posy p3) / (posx p2 - posy p3)
+
+--(b)
+
+vertices::Figura -> [Ponto]
+vertices (Circulo _ _) = []
+vertices (Retangulo p1 p2) = if poligono (Retangulo p1 p2) then [p1, Cartesiano (posx p2) (posy p1), Cartesiano (posx p1) (posy p2) ,p2] else []
+vertices (Triangulo p1 p2 p3) = if poligono (Triangulo p1 p2 p3) then [p1 , p2 , p3] else []
+
+--(c)
+
+area:: Figura -> Double
+area (Triangulo p1 p2 p3) =
+    let a = dist' p1 p2
+        b = dist' p2 p3
+        c = dist' p3 p1
+        s = (a+b+c) / 2 --semi-perimetro
+    in sqrt (s*(s-a)*(s-b)*(s-c)) --formula de Heron
+area (Retangulo p1 p2) = abs(posx p1 - posx p2) * abs(posy p1 - posy p2) -- valor do x do ponto 1 - valor x do ponto 2 = comprimento ^ valor do y do ponto 1 - valor do y do ponto 2 = altura
+area (Circulo _ r) = pi*r^2
+
+--(d)
+
+perimetro'::Figura -> Double
+perimetro' (Circulo _ r) = 2*pi*r
+perimetro' (Retangulo p1 p2) = abs(posx p1 - posx p2)*2 + abs(posy p1 - posy p2)*2
+perimetro' (Triangulo p1 p2 p3) = dist' p1 p2 + dist' p2 p3 * dist' p3 p1
+
+--Exercicio 8
+
+--(a)
+
+myisLower::Char->Bool
+myisLower c = c `elem` ['a'..'z']
+
+--(b)
+
+myisDigit::Char->Bool 
+myisDigit c = c `elem` ['0'..'9']
+
+--(c)
+
+myisAlpha::Char->Bool 
+myisAlpha c = myisLower c || c `elem` ['A'..'Z']
+
+--(d)
+
+mytoUpper::Char->Char 
+mytoUpper c = if myisLower c then chr (ord c - 32) else c
+
+--(e)
+
+myintToDigit::Int->Char 
+myintToDigit c = chr (c + 48)
+
+--(f)
+
+mydigitToInt::Char->Int 
+mydigitToInt c = ord c - 48
