@@ -46,3 +46,23 @@ myzip::[a]->[b]->[(a,b)]
 myzip [] _ = []
 myzip _ [] = []
 myzip (h1:t1) (h2:t2) = (h1,h2) : myzip t1 t2
+
+--Exercicio 9
+
+myreplicate::Int->a->[a]
+myreplicate 0 _ = []
+myreplicate a y = y:myreplicate (a-1) y
+
+--Exercicio 10
+
+myintersperce::a->[a]->[a]
+myintersperce n [] = []
+myintersperce n [t] = [t]
+myintersperce n (h:t)= h:n:myintersperce n t
+
+--Exercicio 11
+
+mygroup::Eq a => [a] -> [[a]]
+mygroup [] = []
+mygroup (h1:h2:t)
+    |h1 == h2 = (h1:h2):mygroup t
