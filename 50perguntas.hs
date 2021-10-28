@@ -62,7 +62,7 @@ myintersperce n (h:t)= h:n:myintersperce n t
 
 --Exercicio 11
 
-mygroup::Eq a => [a] -> [[a]]
-mygroup [] = []
-mygroup (h1:h2:t)
-    |h1 == h2 = (h1:h2):mygroup t
+--mygroup::Eq a => [a] -> [[a]]
+--mygroup [] = []
+--mygroup (h1:h2:t)
+--    |h1 == h2 = (h1:h2):mygroup t
