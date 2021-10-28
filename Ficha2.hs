@@ -47,7 +47,7 @@ segundos [] = []
 segundos ((_,b):t) = b:segundos t
 
 --(h)
-
+{-}
 nosPrimeiros :: (Eq a) => a -> [(a,b)] -> Bool
 nosPrimeiros ((a,_):t) x = (a == x) || nosPrimeiros t
-nosPrimeiros [] x = False
+nosPrimeiros [] x = False -}
