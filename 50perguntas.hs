@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+import Data.Array.Base (listArrayST)
 --Exercicio 1
 deAde::Int->Int->[Int]
 deAde x y
@@ -65,6 +66,64 @@ myintersperce n (h:t)= h:n:myintersperce n t
 mygroup::Eq a => [a] -> [[a]]
 mygroup [] = []
 mygroup [x] = [[x]]
-mygroup (_:x:y:xs)
-    |x /= y = [x]:mygroup (y:xs)
-    |x == y = [x,y]:mygroup xs 
+mygroup (h:t)
+    |h == head hr = (h:hr):tr
+    |otherwise = [h]:hr:tr
+    where (hr:tr) = mygroup t
+
+--Exercicio 12
+
+myconcat :: [[a]] -> [a]
+myconcat = concat
+
+--Exercicio 13
+
+myinits :: [a] -> [[a]]
+myinits [] = [[]]
+myinits [x] = [[],[x]]
+myinits (h:t) = [] : help h (myinits t)
+    where help h (x:xs) = (h:x):help h xs
+          help _ [] = []
+
+--Exercicio 14
+
+mytails :: [a] -> [[a]]
+mytails [] = [[]]
+mytails [x] = [[x],[]]
+mytails l = l : mytails (tail l)
+
+--Exercicio 15
+
+myheads :: [[a]] -> [a]
+myheads [] = []
+myheads ((x:y):t) = x:myheads t
+
+--Exercicio 16
+
+mytotal :: [[a]] -> Int
+mytotal [[]] = 0
+mytotal [[x]] = 1
+mytotal l = sum(map length l)
+
+--Exercicio 17
+
+fun :: [(a,b,c)] -> [(a,c)]
+fun [] = []
+fun ((a,_,c):t) = (a,c): fun t
+
+--Exercicio 18
+
+cola :: [(String,b,c)] -> String
+cola [] = []
+cola ((strg,b,c):t) = strg ++ cola t
+
+--Exercicio 19
+
+idade :: Int -> Int -> [(String,Int)] -> [String]
+idade _ _ [] = []
+idade a i ((strg,n):t) = if a - n >= i then strg : idade a i t else idade a i t
+
+--Exercicio 20
+
+mypowerEnumFrom :: Int -> Int -> [Int]
+mypowerEnumFrom n m = 
