@@ -132,33 +132,19 @@ mypowerEnumFrom n m
     |m > 1 = mypowerEnumFrom n (m-1) ++ [n^(m-1)]
     |otherwise = []
 
-{--Exercicio 21 
+--Exercicio 21 
 
 myisPrime :: Int -> Bool
-myisPrime n
-    |n < 2 = False
-    |x >= 2 && x <= sqrt n && mod n x == 0 = False
-    |otherwise = True
+myisPrime 1 = False
+myisPrime 2 = True
+myisPrime n | not (null ([x | x <- [2..n-1], mod n x == 0])) = False
+                        |otherwise = True
 
-
-myisPrime :: Integer -> Bool
-myisPrime n
-    | n <= 3 = n > 1
-    | divisibleBy 2 = False
-    | divisibleBy 3 = False
-    | n < 25 = True
-    | any 
-        (\k -> divisibleBy k || divisibleBy (k + 2)) 
-        [5,11..floor(sqrt $ fromIntegral n)] 
-            = False
-    | otherwise = True
-    where
-        divisibleBy x = mod n x == 0 -}
 
 --Exercicio 22
 
 myisPrefixOf :: Eq a => [a] -> [a] -> Bool
-myisPrefixOf [] _ = True 
+myisPrefixOf [] _ = True
 myisPrefixOf _ [] = True
 myisPrefixOf (h1:t1) (h2:t2)
     |h1 == h2 = myisPrefixOf t1 t2
@@ -166,3 +152,52 @@ myisPrefixOf (h1:t1) (h2:t2)
     |otherwise = True
 
 --Exercicio 23
+
+myisSuffixOf :: Eq a => [a] -> [a] -> Bool
+myisSuffixOf [] _ = False
+myisSuffixOf _ [] = False
+myisSuffixOf l1 l2
+    |l1 == l2 = True
+    |l1 /= l2 = myisSuffixOf l1 (tail l2)
+    |otherwise = False
+
+--Exercicio 24
+
+myisSubsequenceOf :: Eq a => [a] -> [a] -> Bool
+myisSubsequenceOf [] _ = True
+myisSubsequenceOf _ [] = False
+myisSubsequenceOf (h1:t1) (h2:t2)
+    |h1 == h2 = myisSubsequenceOf t1 t2
+    |h1 /= h2 = myisSubsequenceOf (h1:t1) t2
+    |otherwise = False
+
+--Exercicio 25
+
+myelemIndices :: Eq a => a -> [a] -> [Int]
+myelemIndices _ [] = []
+myelemIndices n (h:t)
+    |n == h = 0 : map (+1) (myelemIndices n t)
+    |otherwise = map (+1) (myelemIndices n t)
+
+--Exercicio 26
+
+mynub :: Eq a => [a] -> [a]
+mynub [] = []
+mynub (h:t) = if h `elem` t then mynub t else h:mynub t
+
+--Exercicio 27
+
+mydelete :: Eq a => a -> [a] -> [a]
+mydelete _ [] = []
+mydelete n (h:t)
+    |n == h = t
+    |n /= h = h:mydelete n t
+
+--Exercicio 28
+
+rem :: Eq a => [a] -> [a] -> [a]
+rem [] _ = []
+rem _ [] = []
+rem (h1:t1) (h2:t2)
+    |h1 == h2 = rem ()
+
