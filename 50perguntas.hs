@@ -126,4 +126,19 @@ idade a i ((strg,n):t) = if a - n >= i then strg : idade a i t else idade a i t
 --Exercicio 20
 
 mypowerEnumFrom :: Int -> Int -> [Int]
-mypowerEnumFrom n m = 
+mypowerEnumFrom n m
+    |m == 1 = [1]
+    |m > 1 = mypowerEnumFrom n (m-1) ++ [n^(m-1)]
+    |otherwise = []
+
+--Exercicio 21 
+
+--isPrime :: Int -> Bool
+--isPrime n =
+
+--auxiliar
+
+testePrimo :: Int -> Int 
+testePrimo n 
+    |n < 2 == False 
+    |n >= 2 = 
