@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# OPTIONS_GHC -Wno-overlapping-patterns #-}
 import Data.Array.Base (listArrayST)
 --Exercicio 1
 deAde::Int->Int->[Int]
@@ -131,14 +132,37 @@ mypowerEnumFrom n m
     |m > 1 = mypowerEnumFrom n (m-1) ++ [n^(m-1)]
     |otherwise = []
 
---Exercicio 21 
+{--Exercicio 21 
 
---isPrime :: Int -> Bool
---isPrime n =
+myisPrime :: Int -> Bool
+myisPrime n
+    |n < 2 = False
+    |x >= 2 && x <= sqrt n && mod n x == 0 = False
+    |otherwise = True
 
---auxiliar
 
-testePrimo :: Int -> Int 
-testePrimo n 
-    |n < 2 == False 
-    |n >= 2 = 
+myisPrime :: Integer -> Bool
+myisPrime n
+    | n <= 3 = n > 1
+    | divisibleBy 2 = False
+    | divisibleBy 3 = False
+    | n < 25 = True
+    | any 
+        (\k -> divisibleBy k || divisibleBy (k + 2)) 
+        [5,11..floor(sqrt $ fromIntegral n)] 
+            = False
+    | otherwise = True
+    where
+        divisibleBy x = mod n x == 0 -}
+
+--Exercicio 22
+
+myisPrefixOf :: Eq a => [a] -> [a] -> Bool
+myisPrefixOf [] _ = True 
+myisPrefixOf _ [] = True
+myisPrefixOf (h1:t1) (h2:t2)
+    |h1 == h2 = myisPrefixOf t1 t2
+    |h1 /= h2 = False
+    |otherwise = True
+
+--Exercicio 23
