@@ -27,7 +27,7 @@ max3::Int->Int->Int->Int
 max3 x y z
     |max2 x y > z = max2 x y
     |otherwise = z
---teste
+
 --Exercicio 2
 
 nRaizes::Double->Double->Double->Int
