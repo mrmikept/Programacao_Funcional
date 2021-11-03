@@ -1,6 +1,7 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 {-# OPTIONS_GHC -Wno-overlapping-patterns #-}
 import Data.Array.Base (listArrayST)
+import Text.Read (prec)
 --Exercicio 1
 deAde::Int->Int->[Int]
 deAde x y
@@ -195,9 +196,72 @@ mydelete n (h:t)
 
 --Exercicio 28
 
-rem :: Eq a => [a] -> [a] -> [a]
-rem [] _ = []
-rem _ [] = []
-rem (h1:t1) (h2:t2)
-    |h1 == h2 = rem ()
+remv :: Eq a => [a] -> [a] -> [a]
+remv [] _ = []
+remv l [] = l
+remv (h1:t1) (h2:t2)
+    |h1 == h2 = remv t1 t2
+    |h1 /= h2 = h1:remv t1 (h2:t2)
 
+--Exercicio 29
+
+myunion :: Eq a => [a] -> [a] -> [a]
+myunion l [] = l
+myunion [] _ = []
+myunion (h1:t1) (h2:t2)
+    |h2 `elem` (h1:t1) = myunion (h1:t1) t2
+    |otherwise = myunion ((h1:t1) ++ [h2]) t2
+
+--Exercicio 30
+
+myintersect :: Eq a => [a] -> [a] -> [a]
+myintersect [] _ = []
+myintersect l [] = l
+myintersect (h1:t1) l
+    |h1 `elem` l = h1:myintersect t1 l
+    |otherwise = myintersect t1 l
+
+--Exercicio 31
+
+myinsert :: Ord a => a -> [a] -> [a]
+myinsert n [] = [n]
+myinsert n (h:t)
+    |n > h = h:myinsert n t
+    |otherwise = n:h:t
+
+--Exercicio 32
+
+myunwords :: [String] -> String
+myunwords [] = ""
+myunwords (h:t) = h ++ (if null t then "" else " ") ++ myunwords t
+
+--Exercicio 33
+
+myunlines :: [String] -> String 
+myunlines [] = ""
+myunlines (h:t) = h ++ "\n" ++ myunlines t
+
+--Exercicio 34
+
+pMaior :: Ord a => [a] -> Int
+pMaior [a] = 0 
+pMaior (h:t)
+    |h > (t !! pMaior t) = 0
+    |otherwise = 1 + pMaior t
+
+--Exercicio 35 
+
+mylookup :: Eq a => a -> [(a,b)] -> Maybe b
+mylookup _ [] = Nothing 
+mylookup x ((a,b):t)
+    |x == a = Just b
+    |otherwise = mylookup x t
+
+--Exercicio 36
+
+preCrescente :: Ord a => [a] -> [a]
+preCrescente [] = [] 
+preCrescente [x] = [x]
+preCrescente (h:t)
+    |h < head t = h:preCrescente t
+    |otherwise = preCrescente t
