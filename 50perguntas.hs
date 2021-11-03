@@ -1,7 +1,5 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-{-# OPTIONS_GHC -Wno-overlapping-patterns #-}
-import Data.Array.Base (listArrayST)
-import Text.Read (prec)
+import Data.Either ()
 --Exercicio 1
 deAde::Int->Int->[Int]
 deAde x y
@@ -371,4 +369,15 @@ controiMSet (h:t) = insereMSet h (controiMSet t)
 {-Nesta funcao usamos a funcao insereMSet como funcao auxiliar para a contrucao da lista-}
 
 --Exercicio 44
+
+mypartitionEithers :: [Either a b] -> ([a],[b])
+mypartitionEithers (x:xs) = (esquerda (x:xs) , direita (x:xs))
+    where esquerda [] = []
+          esquerda ((Left x):ls) = x: esquerda ls
+          esquerda ((Right x):ls) = esquerda ls
+          direita [] = []
+          direita ((Left x):ls) = direita ls
+          direita ((Right x):ls) = x:direita ls
+
+--Testar no Ghci: mypartitionEithers [Left 1, Right "Hello", Left 4, Left 5, Right "World!"]
 
