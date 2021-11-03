@@ -180,6 +180,23 @@ myelemIndices n (h:t)
     |n == h = 0 : map (+1) (myelemIndices n t)
     |otherwise = map (+1) (myelemIndices n t)
 
+--Outra forma de fazer a funcao
+
+myelemIndices2 :: Eq a => a -> [a] -> [Int]
+myelemIndices2 _ [] = []
+myelemIndices2 x l = eIA 0 x l
+
+--auxiliar
+
+eIA :: Eq a => Int -> a -> [a] ->[Int]
+eIA _ _ [] = []
+eIA p x (h:t)
+    |x == h = p : eIA (p+1) x t
+    |otherwise = eIA (p+1) x t
+
+{-A funcao myelemIndices2 usa a funcao eIA(elemIndicesA) como funcao auxiliar. onde p é a posicao onde encontramos na lista um valor de um inteiro igual a x.
+Usamos esta maneira para só termos de "ler" a lista somente uma vez!-}
+
 --Exercicio 26
 
 mynub :: Eq a => [a] -> [a]
@@ -249,6 +266,23 @@ pMaior (h:t)
     |h > (t !! pMaior t) = 0
     |otherwise = 1 + pMaior t
 
+--Outras formas de fazer pMaior
+
+pMaior2 :: Ord a => [a] -> Int 
+pMaior2 (h:t) = pMA (h , 0 ,1) t
+
+--auxiliar
+
+pMA :: Ord a => (a,Int,Int) -> [a] -> Int
+pMA (_ , pm , _) [] = pm
+pMA (m , pm , pa) (h:t)
+    |h > m = pMA (h , pa , pa+1) t
+    |otherwise = pMA (m, pm, pa+1) t
+
+{-A funcao pMaior2 usar como auxiliar a funcao pMA onde usando pontos de acumulacao calculamos qual é o maior numero de uma lista,
+sendo m = maior atual da lista, pm = posicao do maior atual e pa = posicao atual que estamos na lista.
+Usamos esta maneira para não termos que "ler" a lista mais que uma vez na funcao!-}
+
 --Exercicio 35 
 
 mylookup :: Eq a => a -> [(a,b)] -> Maybe b
@@ -260,8 +294,25 @@ mylookup x ((a,b):t)
 --Exercicio 36
 
 preCrescente :: Ord a => [a] -> [a]
-preCrescente [] = [] 
-preCrescente [x] = [x]
-preCrescente (h:t)
-    |h < head t = h:preCrescente t
-    |otherwise = preCrescente t
+preCrescente [] = []
+preCrescente (x:y:xys)
+    |x < y = x:y:preCrescente xys
+    |otherwise = [x]
+
+--Exercicio 37
+
+myiSort :: Ord a => [a] -> [a]
+myiSort [] = []
+myiSort [x] = [x]
+myiSort (x:y:xys)
+    |x < y = x:myiSort(y:xys)
+    |otherwise = y:myiSort(x:xys) 
+
+--Exercicio 38
+
+menor :: String -> String -> Bool
+menor [] _ = True
+menor _ [] = False
+menor l1 l2
+    |length l1 < length l2 = True
+    |otherwise = False
