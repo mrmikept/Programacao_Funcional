@@ -254,21 +254,21 @@ myunwords (h:t) = h ++ (if null t then "" else " ") ++ myunwords t
 
 --Exercicio 33
 
-myunlines :: [String] -> String 
+myunlines :: [String] -> String
 myunlines [] = ""
 myunlines (h:t) = h ++ "\n" ++ myunlines t
 
 --Exercicio 34
 
 pMaior :: Ord a => [a] -> Int
-pMaior [a] = 0 
+pMaior [a] = 0
 pMaior (h:t)
     |h > (t !! pMaior t) = 0
     |otherwise = 1 + pMaior t
 
 --Outras formas de fazer pMaior
 
-pMaior2 :: Ord a => [a] -> Int 
+pMaior2 :: Ord a => [a] -> Int
 pMaior2 (h:t) = pMA (h , 0 ,1) t
 
 --auxiliar
@@ -286,7 +286,7 @@ Usamos esta maneira para não termos que "ler" a lista mais que uma vez na funca
 --Exercicio 35 
 
 mylookup :: Eq a => a -> [(a,b)] -> Maybe b
-mylookup _ [] = Nothing 
+mylookup _ [] = Nothing
 mylookup x ((a,b):t)
     |x == a = Just b
     |otherwise = mylookup x t
@@ -306,13 +306,69 @@ myiSort [] = []
 myiSort [x] = [x]
 myiSort (x:y:xys)
     |x < y = x:myiSort(y:xys)
-    |otherwise = y:myiSort(x:xys) 
+    |otherwise = y:myiSort(x:xys)
 
 --Exercicio 38
 
 menor :: String -> String -> Bool
-menor [] _ = True
-menor _ [] = False
-menor l1 l2
+menor "" _ = True
+menor _ "" = False
+menor (h1:t1) (h2:t2) = menor t1 t2
+
+--Exemplo da funcao menor sendo não recursiva
+
+menorA :: String -> String -> Bool
+menorA "" _ = True
+menorA _ "" = False
+menorA l1 l2
     |length l1 < length l2 = True
     |otherwise = False
+
+--Exercicio 39
+
+myeleMSet :: Eq a => a -> [(a,Int)] -> Bool
+myeleMSet _ [] = False
+myeleMSet n ((a,b):t)
+    |n == a = True
+    |otherwise = myeleMSet n t
+
+--Outra forma mais simplificada de escrever a funcao
+
+myeleMSetA :: Eq a => a -> [(a,Int)] -> Bool
+myeleMSetA _ [] = False
+myeleMSetA n ((a,b):t) = n == a || myeleMSetA n t
+
+--Exercicio 40
+
+converteMSet :: [(a,Int)] -> [a]
+converteMSet [] = []
+converteMSet ((a,b):t)
+    |b > 0 = a:converteMSet((a,b-1):t)
+    |b == 0 = converteMSet t
+
+--Exercicio 41
+
+insereMSet :: Eq a => a -> [(a,Int)] -> [(a,Int)]
+insereMSet n [] = [(n,1)]
+insereMSet n ((a,b):t)
+    |n == a = (a,b+1):t
+    |otherwise = (a,b):insereMSet n t
+
+--Exercicio 42
+
+removeMSet :: Eq a => a -> [(a,Int)] -> [(a,Int)]
+removeMSet _ [] = []
+removeMSet n ((a,b):t)
+    |n == a = t
+    |otherwise = (a,b):removeMSet n t
+
+--Exercicio 43
+
+controiMSet :: Ord a => [a] -> [(a,Int)]
+controiMSet [] = []
+controiMSet (h:t) = insereMSet h (controiMSet t)
+
+{-Nesta funcao usamos a funcao insereMSet como funcao auxiliar para a contrucao da lista-}
+
+--Exercicio 44
+
