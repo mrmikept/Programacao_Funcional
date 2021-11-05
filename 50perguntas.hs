@@ -381,3 +381,9 @@ mypartitionEithers (x:xs) = (esquerda (x:xs) , direita (x:xs))
 
 --Testar no Ghci: mypartitionEithers [Left 1, Right "Hello", Left 4, Left 5, Right "World!"]
 
+--Exercicio 45
+
+mycatMaybes :: [Maybe a] -> [a]
+mycatMaybes [] = []
+mycatMaybes ((Just x):xs) = x:mycatMaybes xs
+mycatMaybes (Nothing:xs) = mycatMaybes xs
