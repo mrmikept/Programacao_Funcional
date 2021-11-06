@@ -1,6 +1,4 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-import Data.Either ()
-import GHC.Show (Show)
 --Exercicio 1
 deAde::Int->Int->[Int]
 deAde x y
@@ -135,10 +133,17 @@ mypowerEnumFrom n m
 --Exercicio 21 
 
 myisPrime :: Int -> Bool
-myisPrime 1 = False
-myisPrime 2 = True
-myisPrime n | not (null ([x | x <- [2..n-1], mod n x == 0])) = False
-                        |otherwise = True
+myisPrime n
+    |n >= 2 = primeCheck n 2
+    |otherwise = False
+
+--Funcao auxiliar
+
+primeCheck :: Int -> Int -> Bool
+primeCheck n m
+    |m * m > n = True
+    |mod n m == 0 = False
+    |otherwise = primeCheck n (m + 1)
 
 
 --Exercicio 22
