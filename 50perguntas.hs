@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 import Data.Either ()
+import GHC.Show (Show)
 --Exercicio 1
 deAde::Int->Int->[Int]
 deAde x y
@@ -379,7 +380,7 @@ mypartitionEithers (x:xs) = (esquerda (x:xs) , direita (x:xs))
           direita ((Left x):ls) = direita ls
           direita ((Right x):ls) = x:direita ls
 
---Testar no Ghci: mypartitionEithers [Left 1, Right "Hello", Left 4, Left 5, Right "World!"]
+--Testar no Ghci: mypartitionEithers [Left 1, Right "Hello", Left 4, Left 5, Right "World!"] -> retorna: [[1,4,5],["Hello","World"]]
 
 --Exercicio 45
 
@@ -387,3 +388,74 @@ mycatMaybes :: [Maybe a] -> [a]
 mycatMaybes [] = []
 mycatMaybes ((Just x):xs) = x:mycatMaybes xs
 mycatMaybes (Nothing:xs) = mycatMaybes xs
+
+--Testar no Ghci: mycatMaybes [Just 1, Nothing, Just 5, Just 3] -> retorna: [1,5,3]
+
+--Exercicio 46
+
+data Movimento = Norte | Sul | Este | Oeste
+                deriving Show
+
+caminho :: (Int , Int) -> (Int , Int) -> [Movimento]
+caminho (xi , yi) (xf , yf)
+    |xi > xf = Oeste:caminho(xi-1 , yi) (xf , yf)
+    |xi < xf = Este:caminho(xi+1 , yi) (xf , yf)
+    |yi > yf = Sul:caminho(xi , yi-1) (xf , yf)
+    |yi < yf = Norte:caminho(xi , yi+1) (xf , yf)
+    |otherwise = []
+
+--Exercicio 47
+
+hasLoops :: (Int,Int) -> [Movimento] -> Bool
+hasLoops _ [] = False
+hasLoops p mov = (p == posicaoR p mov) || hasLoops p (init mov)
+
+--Funcao Auxiliar
+{-Vamos defenir a funcao posicaoR(posicao do Robot) onde damos a posicao inicial e uma lista de Movimentos e retorna as coord da posicao final-}
+
+posicaoR :: (Int , Int) -> [Movimento] -> (Int , Int)
+posicaoR p [] = p
+posicaoR (xi , yi) (h:t) = posicaoR (case h of Norte -> (xi , yi +1)
+                                               Sul -> (xi , yi -1)
+                                               Este -> (xi +1 , yi)
+                                               Oeste -> (xi -1 , yi)) t
+
+--Exercicio 48
+
+type Ponto = (Float,Float)
+data Rectangulo = Rect Ponto Ponto
+
+--Os retangulos sao representados pelas coordenadas de dois pontos que formam a sua diagonal
+
+contaQuadrados :: [Rectangulo] -> Int
+contaQuadrados [] = 0
+contaQuadrados (h:t)
+    |verifQuadr h = 1 + contaQuadrados t
+    |otherwise = contaQuadrados t
+
+--Funcao Auxiliar
+{- Vamos defenir uma funcao auxiliar verifQuadr(Verificar se quadrado) onde damos os pontos de um retangulo da cabeça da lista e devolve um Bool (True ou False), 
+se True então é quadrado, caso contrario não é -}
+
+verifQuadr :: Rectangulo -> Bool
+verifQuadr (Rect (x1,y1) (x2,y2)) = abs (x2 - x1) == abs (y2 - y1)
+
+{-Para verificar se é quadrado o modulo de x2 - x1(comprimento do rect.) tem de ser igual ao valor do modulo y2 - y1(altura do retangulo)-}
+
+--Exercicio 49
+
+areaTotal :: [Rectangulo] -> Float
+areaTotal [] = 0
+areaTotal (Rect (x1, y1) (x2 , y2) : t) = (abs (x2 - x1) * abs (y2 - y1)) + areaTotal t 
+
+--Exercicio 50
+
+data Equipamento = Bom | Razoavel | Avariado deriving Show
+
+naoReparar :: [Equipamento] -> Int
+naoReparar [] = 0
+naoReparar (h:t) = case h of Avariado -> naoReparar t
+                             _ -> 1 + naoReparar t
+
+{-Esta funcao basicamente corre a lista dada e quando encontra um "Avariado" continua a ler a lista e quando encontra um "Bom" ou "Razoavel" soma 1 ao valor final,
+dando assim o valor de todos os equipamentos que não estão avariados.-}
