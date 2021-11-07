@@ -360,10 +360,11 @@ insereMSet n ((a,b):t)
 
 --Exercicio 42
 
-removeMSet :: Eq a => a -> [(a,Int)] -> [(a,Int)]
+removeMSet :: Eq a => a -> [(a,Int)]->[(a,Int)]
 removeMSet _ [] = []
 removeMSet n ((a,b):t)
-    |n == a = t
+    |n == a && b > 1 = (a,b-1):t
+    |n == a && b == 1 = t
     |otherwise = (a,b):removeMSet n t
 
 --Exercicio 43
@@ -434,9 +435,16 @@ data Rectangulo = Rect Ponto Ponto
 
 contaQuadrados :: [Rectangulo] -> Int
 contaQuadrados [] = 0
-contaQuadrados (h:t)
-    |verifQuadr h = 1 + contaQuadrados t
-    |otherwise = contaQuadrados t
+contaQuadrados ((Rect (x1,y1) (x2,y2)) :t)
+    |abs(x2 - x1) == abs(y2 - y1) = 1 + contaQuadrados t
+    |otherwise = contaQuadrados t 
+
+-- Funcao que recorre a uma funcao auxiliar
+contaQuadrados' :: [Rectangulo] -> Int
+contaQuadrados' [] = 0
+contaQuadrados' (h:t)
+    |verifQuadr h = 1 + contaQuadrados' t
+    |otherwise = contaQuadrados' t
 
 --Funcao Auxiliar
 {- Vamos defenir uma funcao auxiliar verifQuadr(Verificar se quadrado) onde damos os pontos de um retangulo da cabeça da lista e devolve um Bool (True ou False), 
