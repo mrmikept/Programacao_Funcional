@@ -366,7 +366,7 @@ removeMSet n ((a,b):t)
     |n == a && b > 1 = (a,b-1):t
     |n == a && b == 1 = t
     |otherwise = (a,b):removeMSet n t
---teste
+
 --Exercicio 43
 
 controiMSet :: Ord a => [a] -> [(a,Int)]
