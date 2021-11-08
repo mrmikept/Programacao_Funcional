@@ -227,7 +227,6 @@ remv (h1:t1) (h2:t2)
 
 myunion :: Eq a => [a] -> [a] -> [a]
 myunion l [] = l
-myunion [] _ = []
 myunion (h1:t1) (h2:t2)
     |h2 `elem` (h1:t1) = myunion (h1:t1) t2
     |otherwise = myunion ((h1:t1) ++ [h2]) t2
