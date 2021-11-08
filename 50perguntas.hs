@@ -307,9 +307,15 @@ preCrescente (x:y:xys)
 myiSort :: Ord a => [a] -> [a]
 myiSort [] = []
 myiSort [x] = [x]
-myiSort (x:y:xys)
-    |x < y = x:myiSort(y:xys)
-    |otherwise = y:myiSort(x:xys)
+myiSort (h:t) = insere h (myiSort t)
+
+--Funcao auxiliar
+
+insere :: Ord a => a -> [a] -> [a]
+insere x [] = [x]
+insere x (h:t)
+    |x < h = x:h:t
+    |otherwise = h:insere x t
 
 --Exercicio 38
 
