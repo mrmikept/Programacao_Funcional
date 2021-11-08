@@ -174,7 +174,6 @@ myisSubsequenceOf _ [] = False
 myisSubsequenceOf (h1:t1) (h2:t2)
     |h1 == h2 = myisSubsequenceOf t1 t2
     |h1 /= h2 = myisSubsequenceOf (h1:t1) t2
-    |otherwise = False
 
 --Exercicio 25
 
