@@ -299,7 +299,7 @@ mylookup x ((a,b):t)
 preCrescente :: Ord a => [a] -> [a]
 preCrescente [] = []
 preCrescente (x:y:xys)
-    |x < y = x:y:preCrescente xys
+    |y >= x = x:preCrescente (y:xys)
     |otherwise = [x]
 
 --Exercicio 37
