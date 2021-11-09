@@ -321,7 +321,10 @@ insere x (h:t)
 menor :: String -> String -> Bool
 menor "" _ = True
 menor _ "" = False
-menor (h1:t1) (h2:t2) = menor t1 t2
+menor (h1:t1) (h2:t2)
+    |h1 < h2 = True
+    |h1 == h2 = menor t1 t2
+    |otherwise = False
 
 --Exemplo da funcao menor sendo não recursiva
 
