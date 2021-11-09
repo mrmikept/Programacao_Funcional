@@ -36,10 +36,18 @@ tirar n (h:t)
 
 --Exercicio 7
 cair::Int->[a]->[a]
-cair n [] = []
+cair _ [] = []
 cair n (h:t)
     |n == 0 = h:t
     |otherwise = cair (n-1) t
+
+--Outra maneira de fazer a funcao
+
+mydrop :: Int -> [a] -> [a]
+mydrop _ [] = []
+mydrop n (h:t)
+    |n > 0 = drop (n-1) t
+    |n == 0 = h:t
 
 --Exercicio 8
 myzip::[a]->[b]->[(a,b)]
