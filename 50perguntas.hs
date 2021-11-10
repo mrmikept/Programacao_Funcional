@@ -81,7 +81,8 @@ mygroup (h:t)
 --Exercicio 12
 
 myconcat :: [[a]] -> [a]
-myconcat = concat
+myconcat [] = []
+myconcat (h:t) = [h] ++ myconcat t
 
 --Exercicio 13
 
