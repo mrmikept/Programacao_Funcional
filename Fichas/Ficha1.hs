@@ -1,4 +1,6 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+module Ficha1 where
+
 import Data.Char ( ord, chr )
 --Exercício 1
 perimetro::Float->Float
