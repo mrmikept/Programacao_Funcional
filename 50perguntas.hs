@@ -36,10 +36,18 @@ tirar n (h:t)
 
 --Exercicio 7
 cair::Int->[a]->[a]
-cair n [] = []
+cair _ [] = []
 cair n (h:t)
     |n == 0 = h:t
     |otherwise = cair (n-1) t
+
+--Outra maneira de fazer a funcao
+
+mydrop :: Int -> [a] -> [a]
+mydrop _ [] = []
+mydrop n (h:t)
+    |n > 0 = drop (n-1) t
+    |n == 0 = h:t
 
 --Exercicio 8
 myzip::[a]->[b]->[(a,b)]
@@ -73,7 +81,8 @@ mygroup (h:t)
 --Exercicio 12
 
 myconcat :: [[a]] -> [a]
-myconcat = concat
+myconcat [] = []
+myconcat (h:t) = [h] ++ myconcat t
 
 --Exercicio 13
 
@@ -174,7 +183,6 @@ myisSubsequenceOf _ [] = False
 myisSubsequenceOf (h1:t1) (h2:t2)
     |h1 == h2 = myisSubsequenceOf t1 t2
     |h1 /= h2 = myisSubsequenceOf (h1:t1) t2
-    |otherwise = False
 
 --Exercicio 25
 
@@ -228,7 +236,6 @@ remv (h1:t1) (h2:t2)
 
 myunion :: Eq a => [a] -> [a] -> [a]
 myunion l [] = l
-myunion [] _ = []
 myunion (h1:t1) (h2:t2)
     |h2 `elem` (h1:t1) = myunion (h1:t1) t2
     |otherwise = myunion ((h1:t1) ++ [h2]) t2
@@ -300,7 +307,7 @@ mylookup x ((a,b):t)
 preCrescente :: Ord a => [a] -> [a]
 preCrescente [] = []
 preCrescente (x:y:xys)
-    |x < y = x:y:preCrescente xys
+    |y >= x = x:preCrescente (y:xys)
     |otherwise = [x]
 
 --Exercicio 37
@@ -308,16 +315,25 @@ preCrescente (x:y:xys)
 myiSort :: Ord a => [a] -> [a]
 myiSort [] = []
 myiSort [x] = [x]
-myiSort (x:y:xys)
-    |x < y = x:myiSort(y:xys)
-    |otherwise = y:myiSort(x:xys)
+myiSort (h:t) = insere h (myiSort t)
+
+--Funcao auxiliar
+
+insere :: Ord a => a -> [a] -> [a]
+insere x [] = [x]
+insere x (h:t)
+    |x < h = x:h:t
+    |otherwise = h:insere x t
 
 --Exercicio 38
 
 menor :: String -> String -> Bool
 menor "" _ = True
 menor _ "" = False
-menor (h1:t1) (h2:t2) = menor t1 t2
+menor (h1:t1) (h2:t2)
+    |h1 < h2 = True
+    |h1 == h2 = menor t1 t2
+    |otherwise = False
 
 --Exemplo da funcao menor sendo não recursiva
 
@@ -360,10 +376,11 @@ insereMSet n ((a,b):t)
 
 --Exercicio 42
 
-removeMSet :: Eq a => a -> [(a,Int)] -> [(a,Int)]
+removeMSet :: Eq a => a -> [(a,Int)]->[(a,Int)]
 removeMSet _ [] = []
 removeMSet n ((a,b):t)
-    |n == a = t
+    |n == a && b > 1 = (a,b-1):t
+    |n == a && b == 1 = t
     |otherwise = (a,b):removeMSet n t
 
 --Exercicio 43
@@ -434,9 +451,16 @@ data Rectangulo = Rect Ponto Ponto
 
 contaQuadrados :: [Rectangulo] -> Int
 contaQuadrados [] = 0
-contaQuadrados (h:t)
-    |verifQuadr h = 1 + contaQuadrados t
-    |otherwise = contaQuadrados t
+contaQuadrados ((Rect (x1,y1) (x2,y2)) :t)
+    |abs(x2 - x1) == abs(y2 - y1) = 1 + contaQuadrados t
+    |otherwise = contaQuadrados t 
+
+-- Funcao que recorre a uma funcao auxiliar
+contaQuadrados' :: [Rectangulo] -> Int
+contaQuadrados' [] = 0
+contaQuadrados' (h:t)
+    |verifQuadr h = 1 + contaQuadrados' t
+    |otherwise = contaQuadrados' t
 
 --Funcao Auxiliar
 {- Vamos defenir uma funcao auxiliar verifQuadr(Verificar se quadrado) onde damos os pontos de um retangulo da cabeça da lista e devolve um Bool (True ou False), 
