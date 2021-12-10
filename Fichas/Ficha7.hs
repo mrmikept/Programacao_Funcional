@@ -67,3 +67,57 @@ mirror (R a l) = R a (map mirror (reverse l))
 postorder :: RTree a -> [a]
 postorder (R a []) = [a]
 postorder (R a l) = concatMap postorder l ++ [a]
+
+--Exercicio 3
+
+data LTree a = Tip a | Fork (LTree a) (LTree a) deriving Show
+
+--Seja lt1 uma LTree
+
+lt1 = Fork (Fork (Tip 3) (Fork (Tip 2) (Tip 4))) (Fork (Tip 5) (Fork (Tip 6) (Fork (Tip 7) (Tip 1))))
+
+--(a)
+
+ltSum :: Num a => LTree a -> a
+ltSum (Tip x) = x
+ltSum (Fork e d) = ltSum e + ltSum d
+
+--(b)
+
+listaLT :: LTree a -> [a]
+listaLT (Tip x) = [x]
+listaLT (Fork e d) = listaLT e ++ listaLT d
+
+--(c)
+
+ltHeight :: LTree a -> Int
+ltHeight (Tip _) = 0
+ltHeight (Fork e d) = 1 + max(ltHeight e) (ltHeight d)
+
+--Exercicio 4
+
+data FTree a b = Leaf b | No a (FTree a b) (FTree a b) deriving Show
+
+data BTree a = Empty | Node a (BTree a) (BTree a) deriving Show
+
+--Consideremos ft1 como uma FTree
+
+ft1 = No 5 (No 3 (Leaf 1) (Leaf 4)) (No 10 (Leaf 7) (No 15 (Leaf 13) (Leaf 20)))
+
+a4 = Node 5 (Node 3 (Node 1 Empty Empty) (Node 4 (Node 2 Empty Empty) Empty)) (Node 10 (Node 7 Empty Empty) (Node 15 Empty (Node 20 Empty Empty)))
+
+
+--(a)
+
+splitFTree :: FTree a b -> (BTree a, LTree b)
+splitFTree (Leaf n) = (Empty,Tip n)
+splitFTree (No n e d) = (Node n (fst (splitFTree e)) (fst (splitFTree d)), Fork (snd (splitFTree e)) (snd (splitFTree d)))
+
+--(b)
+
+joinTrees :: BTree a -> LTree b -> Maybe (FTree a b)
+joinTrees Empty (Tip x) = Just (Leaf x)
+joinTrees (Node r e d) (Fork a b) = Just (No r aux aux')
+    where Just aux = joinTrees e a
+          Just aux' = joinTrees d b
+joinTrees _ _ = Nothing

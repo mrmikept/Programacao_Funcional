@@ -1,4 +1,3 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 {-# OPTIONS_GHC -Wno-overlapping-patterns #-}
 import Data.List.NonEmpty (insert)
 --Exercicio 1
@@ -127,6 +126,7 @@ type Mat a = [[a]]
 --(a)
 
 dimOK :: Mat a -> Bool
+dimOK [] = True
 dimOK (h:t) = all (\x -> length h == length x) t
 
 --Forma Simples
@@ -152,3 +152,11 @@ transpose m = [[(m !! j) !! i | j <- [0..l-1] ] | i <- [0..c-1]]
 --Esta função usa a função (!!) que procura x elemento de uma lista, ou seja (m!!j) resulta da procura do elemento "j" da lista m
 
 --[[1,2,3],[4,5,6],[7,8,9]] = [[1,4,7],[2,5,7],[3,6,9]]
+
+--(e)
+
+multMat :: Num a => Mat a -> Mat a -> Mat a
+multMat m1 m2 = [ [ sum (zipWith (*) (m1 !! j) [ x !! i | x <- m2 ]) | i <- [0..c-1] ] | j <- [0..l-1] ]
+    where (l,_) = dimMat m1
+          (_,c) = dimMat m2
+
