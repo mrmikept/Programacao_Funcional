@@ -21,3 +21,7 @@ horaMaior:: Hora -> Hora -> Bool
 horaMaior h1 h2
     |h1 < h2 = True
     |otherwise = False -}
+
+
+
+{-TESTE!!-}
