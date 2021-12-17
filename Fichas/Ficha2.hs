@@ -1,5 +1,6 @@
+module Ficha2 where
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+
 import Data.Char (ord)
 --Exercicio 2
 
