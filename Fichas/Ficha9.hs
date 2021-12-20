@@ -170,4 +170,3 @@ menu = do { putStrLn menutxt
                              "",
                              "Sair .............. 0"]
 
-{-teste-}
